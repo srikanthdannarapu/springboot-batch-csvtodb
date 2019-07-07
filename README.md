@@ -16,3 +16,7 @@ domain.datasource.type=MYSQL
 
 #Spring Batch Count of Processed Records
 ItemStream and ChunkListener to count number of records processed by Spring batch job and log the record count in logs file or console.
+
+# validation using ValidationProcessor
+validate Employee data using ValidationProcessor
+
