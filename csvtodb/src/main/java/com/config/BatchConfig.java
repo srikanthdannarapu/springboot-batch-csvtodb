@@ -32,6 +32,7 @@ import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 
 import com.config.condition.H2Condition;
 import com.config.condition.MySQLCondition;
+import com.listner.ItemCountListener;
 import com.model.Employee;
 
 @Configuration
@@ -57,8 +58,19 @@ public class BatchConfig {
 
 	@Bean
 	public Step step() {
-		return stepBuilderFactory.get("step").<Employee, Employee>chunk(5).reader(reader()).processor(processor())
-				.writer(writer()).build();
+		return stepBuilderFactory
+				.get("step")
+				.<Employee, Employee>chunk(5)
+				.reader(reader())
+				.processor(processor())
+				.writer(writer())
+				.listener(listner())
+				.build();
+	}
+
+	@Bean
+	public ItemCountListener listner() {
+		return new ItemCountListener();
 	}
 
 	@Bean
@@ -93,7 +105,7 @@ public class BatchConfig {
 		JdbcBatchItemWriter<Employee> itemWriter = new JdbcBatchItemWriter<Employee>();
 		if (type.equals("MYSQL")) {
 			itemWriter.setDataSource(dataSourceMysql());
-		} else if(type.equals("H2")) {
+		} else if (type.equals("H2")) {
 			itemWriter.setDataSource(dataSourceH2());
 		}
 		itemWriter.setSql("INSERT INTO EMPLOYEE (ID, FIRSTNAME, LASTNAME) VALUES (:id, :firstName, :lastName)");
@@ -107,9 +119,8 @@ public class BatchConfig {
 		EmbeddedDatabaseBuilder embeddedDatabaseBuilder = new EmbeddedDatabaseBuilder();
 		return embeddedDatabaseBuilder.addScript("classpath:org/springframework/batch/core/schema-drop-h2.sql")
 				.addScript("classpath:org/springframework/batch/core/schema-h2.sql")
-				//.addScript("classpath:jdbc/schema.sql")
-				.addScript("classpath:employeeH2.sql")
-				.setType(EmbeddedDatabaseType.H2).build();
+				// .addScript("classpath:jdbc/schema.sql")
+				.addScript("classpath:employeeH2.sql").setType(EmbeddedDatabaseType.H2).build();
 	}
 
 	/*
@@ -142,4 +153,9 @@ public class BatchConfig {
 		// dataSourceInitializer.setEnabled(Boolean.parseBoolean(initDatabase));
 		return dataSourceInitializer;
 	}
+
+	/*
+	 * @Bean public ConsoleItemWriter<Employee> writer() { return new
+	 * ConsoleItemWriter<Employee>(); }
+	 */
 }
