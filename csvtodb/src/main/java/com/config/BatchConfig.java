@@ -1,6 +1,7 @@
 package com.config;
 
 import javax.sql.DataSource;
+
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
@@ -17,12 +18,10 @@ import org.springframework.batch.item.file.mapping.DefaultLineMapper;
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
@@ -34,6 +33,7 @@ import com.config.condition.H2Condition;
 import com.config.condition.MySQLCondition;
 import com.listner.ItemCountListener;
 import com.model.Employee;
+import com.validation.ValidationProcessor;
 
 @Configuration
 @EnableBatchProcessing
@@ -63,6 +63,7 @@ public class BatchConfig {
 				.<Employee, Employee>chunk(5)
 				.reader(reader())
 				.processor(processor())
+				.processor(validationProcessor())
 				.writer(writer())
 				.listener(listner())
 				.build();
@@ -158,4 +159,9 @@ public class BatchConfig {
 	 * @Bean public ConsoleItemWriter<Employee> writer() { return new
 	 * ConsoleItemWriter<Employee>(); }
 	 */
+	
+	 @Bean
+	    public ItemProcessor<Employee, Employee> validationProcessor() {
+	        return new ValidationProcessor();
+	    }
 }
