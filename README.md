@@ -26,8 +26,7 @@ Markup :  - - - -
 # validation using ValidationProcessor
 validate Employee data using ValidationProcessor
 
-> ItemProcessor to add business logic after reading the input and before passing it to writer for writing to the file/database. It should be noted that while
-> it’s possible to return a different datatype than the one provided as input, it’s not necessary.
+***ItemProcessor to add business logic after reading the input and before passing it to writer for writing to the file/database. It should be noted that while it’s possible to return a different datatype than the one provided as input, it’s not necessary.***
 
 Returning null from ItemProcessor indicates that the item should not be continued to be processed.
 
