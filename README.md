@@ -13,3 +13,6 @@ Tip - Make sure that you use jdbc:h2:mem:testdb as JDBC URL.
 set below property to H2 or MYSQL
 
 domain.datasource.type=MYSQL
+
+#Spring Batch Count of Processed Records
+ItemStream and ChunkListener to count number of records processed by Spring batch job and log the record count in logs file or console.
