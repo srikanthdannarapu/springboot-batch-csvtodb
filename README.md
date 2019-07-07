@@ -11,4 +11,5 @@ Tip - Make sure that you use jdbc:h2:mem:testdb as JDBC URL.
 
 # H2 or Mysql connectivity
 set below property to H2 or MYSQL
+
 domain.datasource.type=MYSQL
